@@ -6,42 +6,48 @@ $db_user = "root";
 $db_pass = "";
 $db_name = "ecocharge_hub"; // Your project database name, adjust accordingly
 
-// Establish a global database connection
-function connection() {
+//v1.0.1- Establish a global database db_connect
+function db_connect() {
     global $db_server, $db_user, $db_pass, $db_name;
 
-    // Establish a connection to the database
+    // Establish a db_connect to the database
     $conn = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
 
-    // Handle connection errors
+    // Handle db_connect errors
     if (mysqli_connect_errno()) {
         return null;
     }
     return $conn;
 }
 
+//v1.0.1- Closing The db_connect
+function db_close($conn) { 
+    mysqli_close($conn);
+ }
+ 
+
 // Function to execute queries that modify data (Insert, Update, Delete)
 function execute($query)
 {
-    $conn = connection();
+    $conn = db_connect();
     
     if ($conn) {
         if (mysqli_query($conn, $query)) {
-            mysqli_close($conn);  // Close the connection after query execution
+            mysqli_close($conn);  // Close the db_connect after query execution
             return true;
         } else {
-            mysqli_close($conn);  // Close the connection after query execution
+            mysqli_close($conn);  //v1.0.1- Close the db_connect after query execution
             return mysqli_error($conn);  // Return error message if query fails
         }
     } else {
-        return "Database connection failed: " . mysqli_connect_error();
+        return "Database db_connect failed: " . mysqli_connect_error();
     }
 }
 
 // Function to get data (Select query)
 function get($query)
 {
-    $conn = connection();
+    $conn = db_connect();
     $data = array();
 
     if ($conn) {
@@ -53,9 +59,9 @@ function get($query)
         }
 
         mysqli_free_result($result); // Free result set memory
-        mysqli_close($conn);  // Close the connection after the query
+        mysqli_close($conn);  //v1.0.1- Close the db_connect after the query
     } else {
-        return "Database connection failed: " . mysqli_connect_error();
+        return "Database db_connect failed: " . mysqli_connect_error();
     }
 
     // Return the array of data

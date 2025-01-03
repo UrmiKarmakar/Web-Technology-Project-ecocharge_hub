@@ -10,9 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $username = $_POST['name'];
     $password = $_POST['pwd'];
+    //mysqli_close($conn);  //v1.0.2- Close the db_connect after query execution was removed as it was unnecessary!
 
-    // Establish database connection and sanitize inputs
-    $conn = connection();
 
     // Query the database using the `get` function
     $query = "SELECT * FROM users WHERE username = '$username'";
@@ -25,14 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verify the password
         if (password_verify($password, $user['password'])) {
             // Store user details in session and redirect
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['user_id']; //v1.0.2- Changed the session variable name from id to user_id
             $_SESSION['username'] = $user['username'];
-            $_SESSION['user_type'] = $user['userType'];
+            $_SESSION['user_type'] = $user['user_type'];//v1.0.2- Changed the session variable name from userType to  user_type
 
             // Redirect based on user type
-            if ($user['userType'] == 'Environmentalist') {
+            if ($user['user_type'] == 'Environmentalist') {//v1.0.2- Changed the session variable name from userType to  user_type
                 header('Location: ../view/environmentalist_dashboard.php');
-            } elseif ($user['userType'] == 'Supervisor') {
+            } elseif ($user['user_type'] == 'Supervisor') {//v1.0.2- Changed the session variable name from userType to  user_type
                 header('Location: ../view/supervisor_dashboard.php');
             }
             exit();

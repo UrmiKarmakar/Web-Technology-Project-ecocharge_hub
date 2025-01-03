@@ -1,0 +1,19 @@
+USE ecocharge_hub;
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique user ID
+    name VARCHAR(255) NOT NULL,              -- User's full name
+    email VARCHAR(255) NOT NULL UNIQUE,      -- User's email (should be unique)
+    phone VARCHAR(20) NOT NULL,              -- User's phone number
+    username VARCHAR(50) NOT NULL UNIQUE,    -- Username for login (should be unique)
+    password VARCHAR(255) NOT NULL,          -- Hashed password
+    user_type ENUM('Environmentalist', 'Supervisor') NOT NULL,  -- User role
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Record creation time
+);
+
+
+
+##Links:
+
+http://127.0.0.1/Projects/Web-Technology-Project-ecocharge_hub/ecocharge_hub/
+http://127.0.0.1/Projects/Web-Technology-Project-ecocharge_hub/ecocharge_hub/view/registration.php

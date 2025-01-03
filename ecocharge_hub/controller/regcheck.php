@@ -8,17 +8,18 @@ session_start();
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize user input
-    $conn = connection(); // Establish the connection
+    $conn = db_connect(); //v1.0.1- Establish the connection
     $userType = mysqli_real_escape_string($conn, $_POST['userType']);
     $fullName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $username = mysqli_real_escape_string($conn, $_POST['name']);
-    $password = mysqli_real_escape_string($conn, $_POST['pwd']);
+    $pass = mysqli_real_escape_string($conn, $_POST['pwd']);
     $confirmPassword = mysqli_real_escape_string($conn, $_POST['pwd2']);
+    db_close($conn); //v1.0.1- Close the connection
 
-    // Validate password confirmation
-    if ($password !== $confirmPassword) {
+    // Validate pass confirmation
+    if ($pass !== $confirmPassword) {
         $_SESSION['error'] = "Passwords do not match!";
         header("Location: ../view/registration.php");
         exit();
@@ -31,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Validate password length
-    if (strlen($password) < 8) {
+    // Validate pass length
+    if (strlen($pass) < 8) {
         $_SESSION['error'] = "Password must be at least 8 characters!";
         header("Location: ../view/registration.php");
         exit();
@@ -48,13 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
 
     // Simulating inserting the user into the database (no actual insert operation)
     $registrationSuccess = true; // Simulate successful registration
 
     if ($registrationSuccess) {
-        // Registration successful, redirect to login page
+        //v1.0.1- Registration successful,first use the execute function to the databse to add the user.
+        $query = "INSERT INTO users VALUES(NULL,'$fullName', '$email', '$phone', '$username', '$hashedPassword', '$userType', NOW());";
+        execute($query);
+        //Then, redirect to login page
         $_SESSION['success'] = "Registration successful! Please log in.";
         header("Location: ../view/login.php");
         exit();
